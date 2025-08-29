@@ -20,6 +20,8 @@ public class Main {
 		
 		employeeService.printBirthDay();
 		
+		employeeService.olderEmployees();
+		
 	}
 
 }

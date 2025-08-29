@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -29,27 +31,32 @@ public class EmployeeService {
 			throw new Exception("Funcionário joão não encontrado.");
 		} 
 		System.out.print("Funcionário: " + name + " excluído com sucesso.");
+		System.out.print("");
 	}
 	
 	
 	public void employees() {
-		System.out.println("");
-		for (Entry<String, Employee> entry : employeeData.entrySet()) {
-	        Employee employee = entry.getValue();
-	        NumberFormat nf = NumberFormat.getInstance(new Locale("pt", "BR"));
-	        nf.setMinimumFractionDigits(2); 
-	        nf.setMaximumFractionDigits(2); 
+		try {
+			System.out.println("");
+			for (Entry<String, Employee> entry : employeeData.entrySet()) {
+		        Employee employee = entry.getValue();
+		        NumberFormat nf = NumberFormat.getInstance(new Locale("pt", "BR"));
+		        nf.setMinimumFractionDigits(2); 
+		        nf.setMaximumFractionDigits(2); 
 
-	        String formattedSalary = nf.format(employee.getSalary());
-	        
-	        System.out.println("Nome do Funcionário: " + employee.getName() 
-	        					+ " / Data de nascimento do funcionário: " + employee.getDateOfBirth() 
-	        					+ " / Salário do funcionário: " + formattedSalary
-	        					+ " / Função do funcionário: " + employee.getRole()); 
-	    }
+		        String formattedSalary = nf.format(employee.getSalary());
+		        
+		        System.out.println("Nome do Funcionário: " + employee.getName() 
+		        					+ " / Data de nascimento do funcionário: " + employee.getDateOfBirth() 
+		        					+ " / Salário do funcionário: " + formattedSalary
+		        					+ " / Função do funcionário: " + employee.getRole()); 
+		    }
+		} catch (IllegalStateException e) {
+			throw new IllegalStateException(e.getMessage());
+		}
 	}
 	
-	public void updateSalary() {
+	public void updateSalary() throws Exception {
 		for (Entry<String, Employee> entry : employeeData.entrySet()) {
             Employee employee = entry.getValue();
             BigDecimal salary = increaseSalary(employee.getSalary());
@@ -73,32 +80,33 @@ public class EmployeeService {
         }
 	}
 	
-	private static BigDecimal increaseSalary(BigDecimal salary) {
+	private static BigDecimal increaseSalary(BigDecimal salary) throws Exception {
         BigDecimal increaseFactor = new BigDecimal("1.10");
         BigDecimal newSalary = salary.multiply(increaseFactor);
         return newSalary.setScale(2, RoundingMode.HALF_UP);
     }
 	
 
-	private Map<String, List<Employee>> groupEmployeesByFunction() {
-	    Map<String, List<Employee>> employeesByFunction = new HashMap<>();
+	private Map<String, List<Employee>> groupEmployeesByFunction() throws Exception {
+	
+		Map<String, List<Employee>> employeesByFunction = new HashMap<>();
 
-	    for (Entry<String, Employee> entry : employeeData.entrySet()) {
-	        Employee employee = entry.getValue();
-	        String role = employee.getRole();
+		for (Entry<String, Employee> entry : employeeData.entrySet()) {
+		    Employee employee = entry.getValue();
+		    String role = employee.getRole();
 
-	        List<Employee> employees = employeesByFunction.getOrDefault(role, new ArrayList<>());
+		    List<Employee> employees = employeesByFunction.getOrDefault(role, new ArrayList<>());
 
-	        employees.add(employee);
+		    employees.add(employee);
 
-	        employeesByFunction.put(role, employees);
-	    }
-	    
-	    return employeesByFunction;
+		    employeesByFunction.put(role, employees);
+		}
+		    
+		    return employeesByFunction;
 	}
 	
 	
-	public void printByFunction() {
+	public void printByFunction() throws Exception {
 		Map<String, List<Employee>> employeesByFunction = groupEmployeesByFunction();
 		
 		for (Map.Entry<String, List<Employee>> entry : employeesByFunction.entrySet()) {
@@ -112,14 +120,29 @@ public class EmployeeService {
 	}
 	
 	public void printBirthDay() {
-		System.out.println("Aniversariantes que fazem aniversário no mês 10 e 12:");
-		for (Entry<String, Employee> entry : employeeData.entrySet()) {
-            Employee employee = entry.getValue();
-            LocalDate birthDay = employee.getDateOfBirth();
-            if (birthDay.getMonthValue() == 10 || birthDay.getMonthValue() == 12) {
-            	System.out.println("Nome: " + employee.getName() + " / Data de nascimento: " + employee.getDateOfBirth());
-            }
-        }
+		try {
+			System.out.println("Aniversariantes no mês 10 e 12:");
+			for (Entry<String, Employee> entry : employeeData.entrySet()) {
+	            Employee employee = entry.getValue();
+	            LocalDate birthDay = employee.getDateOfBirth();
+	            if (birthDay.getMonthValue() == 10 || birthDay.getMonthValue() == 12) {
+	            	System.out.println("Nome: " + employee.getName() + " / Data de nascimento: " + employee.getDateOfBirth());
+	            }
+	        }
+		} catch (IllegalStateException e) {
+			throw new IllegalStateException(e.getMessage());
+		}
+	}
+	
+	public void olderEmployees() throws Exception {
+		Employee employee = employeeData.values().stream()
+			        .min(Comparator.comparing(Employee::getDateOfBirth))
+			        .orElseThrow();
+
+		int age = Period.between(employee.getDateOfBirth(), LocalDate.now()).getYears();
+			
+		System.out.println("");
+		System.out.print("Nome: " + employee.getName() + " / Idade: " + age);
 	}
 	
 }
