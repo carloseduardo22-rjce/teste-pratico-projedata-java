@@ -21,7 +21,7 @@ public class EmployeeService {
 	private Csv csv;
     private LinkedHashMap<String, Employee> employeeData;
 
-    public EmployeeService(Csv csv) {
+    public EmployeeService(Csv csv) throws Exception {
         this.csv = csv;
         this.employeeData = this.csv.readCsv();
     }
@@ -31,20 +31,18 @@ public class EmployeeService {
 			throw new Exception("Funcionário joão não encontrado.");
 		} 
 		System.out.print("Funcionário: " + name + " excluído com sucesso.");
-		System.out.print("");
+		System.out.println("");
 	}
 	
 	
 	public void employees() {
 		try {
 			System.out.println("");
+			System.out.println("Todos os funcionários: ");
 			for (Entry<String, Employee> entry : employeeData.entrySet()) {
 		        Employee employee = entry.getValue();
-		        NumberFormat nf = NumberFormat.getInstance(new Locale("pt", "BR"));
-		        nf.setMinimumFractionDigits(2); 
-		        nf.setMaximumFractionDigits(2); 
 
-		        String formattedSalary = nf.format(employee.getSalary());
+		        String formattedSalary = formatValue(employee.getSalary());
 		        
 		        System.out.println("Nome do Funcionário: " + employee.getName() 
 		        					+ " / Data de nascimento do funcionário: " + employee.getDateOfBirth() 
@@ -64,14 +62,11 @@ public class EmployeeService {
 		}
 		
 		System.out.println("");
-		System.out.println("Salário dos funcionários atualizados: ");
+		System.out.println("Salário dos funcionários atualizados com 10%: ");
 		for (Entry<String, Employee> entry : employeeData.entrySet()) {
             Employee employee = entry.getValue();
-            NumberFormat nf = NumberFormat.getInstance(new Locale("pt", "BR"));
-            nf.setMinimumFractionDigits(2); 
-            nf.setMaximumFractionDigits(2); 
 
-            String formattedSalary = nf.format(employee.getSalary());
+            String formattedSalary = formatValue(employee.getSalary());
             
             System.out.println("Nome do Funcionário: " + employee.getName() 
             					+ " / Data de nascimento do funcionário: " + employee.getDateOfBirth() 
@@ -109,6 +104,8 @@ public class EmployeeService {
 	public void printByFunction() throws Exception {
 		Map<String, List<Employee>> employeesByFunction = groupEmployeesByFunction();
 		
+		System.out.println("");
+		System.out.println("Funcionários e suas funções: ");
 		for (Map.Entry<String, List<Employee>> entry : employeesByFunction.entrySet()) {
 	    	System.out.println(); 
 	    	System.out.println("Função: " + entry.getKey());
@@ -129,6 +126,7 @@ public class EmployeeService {
 	            	System.out.println("Nome: " + employee.getName() + " / Data de nascimento: " + employee.getDateOfBirth());
 	            }
 	        }
+			System.out.println("");
 		} catch (IllegalStateException e) {
 			throw new IllegalStateException(e.getMessage());
 		}
@@ -141,8 +139,48 @@ public class EmployeeService {
 
 		int age = Period.between(employee.getDateOfBirth(), LocalDate.now()).getYears();
 			
+		System.out.println("----Funcionário mais velho----");
+		System.out.println("Nome: " + employee.getName() + " / Idade: " + age);
 		System.out.println("");
-		System.out.print("Nome: " + employee.getName() + " / Idade: " + age);
+		System.out.println("----Funcionários por ordem alfabética----");
+	}
+	
+	public void printEmployeesAlphabetically() {
+		List<Employee> employees = employeeData.values().stream().sorted(Comparator.comparing(Employee::getName)).toList();
+		for (Employee employee : employees) {
+			System.out.println("Nome: " + employee.getName());
+		}
+	}
+	
+	public void totalEmployeeSalaries() {
+		System.out.println("");
+	    BigDecimal totalSalary = employeeData.values().stream()
+	        .map(Employee::getSalary) 
+	        .reduce(BigDecimal.ZERO, BigDecimal::add);
+        
+        String formattedTotalSalary = formatValue(totalSalary);
+
+	    System.out.println("Soma total dos salários: " + formattedTotalSalary);
+	}
+	
+	private static String formatValue (BigDecimal value) {
+		NumberFormat nf = NumberFormat.getInstance(new Locale("pt", "BR"));
+        nf.setMinimumFractionDigits(2); 
+        nf.setMaximumFractionDigits(2); 
+
+        return nf.format(value);
+	}
+	
+	public void minimumSalarys() throws Exception {
+	    BigDecimal minimumSalary = new BigDecimal("1212.00");
+
+	    System.out.println("");
+	    for (Entry<String, Employee> entry : employeeData.entrySet()) {
+	        Employee employee = entry.getValue();
+	        BigDecimal result = employee.getSalary().divide(minimumSalary, 2, RoundingMode.HALF_UP);
+	        System.out.println("Nome do funcionário: " + employee.getName() + 
+	                           " | Quantidade aproximada de salários mínimos: " + result);
+	    }
 	}
 	
 }

@@ -18,7 +18,6 @@ public class Csv {
 	
     public LinkedHashMap<String, Employee> readCsv() {
     	try {
-
     		LinkedHashMap<String, Employee> employeeData = new LinkedHashMap<>();
             br = new BufferedReader(new FileReader("src/file/dadosfuncionarios.csv"));
             while ((line = br.readLine()) != null) {

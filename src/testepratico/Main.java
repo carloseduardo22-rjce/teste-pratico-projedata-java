@@ -22,6 +22,12 @@ public class Main {
 		
 		employeeService.olderEmployees();
 		
+		employeeService.printEmployeesAlphabetically();
+		
+		employeeService.totalEmployeeSalaries();
+		
+		employeeService.minimumSalarys();
+		
 	}
 
 }
