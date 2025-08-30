@@ -21,14 +21,13 @@ testepratico/
 │   └── test/
 │       └── EmployeeServiceTest.java    # Testes unitários das funcionalidades
 |
-├── bin/                             # Diretório com classes compiladas
 ├── pom.xml                          # Configuração Maven
 └── README.md                        # Documentação do projeto
 ```
 
 ## 🎯 Requisitos Implementados
 
-### 1. Classe Person (`model.Person`)
+### 1. Classe Person
 
 **Requisito**: Classe Pessoa com os atributos: nome (String) e data nascimento (LocalDate).
 
@@ -39,7 +38,7 @@ testepratico/
   - `getName()`: Retorna o nome
   - `getDateOfBirth()`: Retorna a data de nascimento
 
-### 2. Classe Employee (`model.Employee`)
+### 2. Classe Employee
 
 **Requisito**: Classe Funcionário que estenda a classe Pessoa, com os atributos: salário (BigDecimal) e função (String).
 
@@ -182,7 +181,7 @@ testepratico/
 
 - **Método**: `formatDate(LocalDate birthDate)` (privado)
 - **Função**: Formatar datas de aniversário para o padrão dd/mm/yyyy
-- **Implementação**: `DateTimeFormatter` para formatação das datas passando o pattern de dd/mm/yyyy
+- **Implementação**: `DateTimeFormatter` para formatação das datas passando o pattern dd/mm/yyyy
 
 ## 🚀 Como Executar o Projeto
 
@@ -206,7 +205,7 @@ testepratico/
    - **VS Code**: File → Open Folder → Selecione a pasta do projeto
 
 3. **Execute a aplicação**:
-   - Navegue até a classe `Main.java` em `src/testepratico/`
+   - Navegue até a classe `Main.java` em `src/main`
    - Execute o método `main`
    - A aplicação processará automaticamente todos os requisitos
 
