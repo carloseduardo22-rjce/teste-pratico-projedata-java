@@ -19,7 +19,7 @@ public class Csv {
     public LinkedHashMap<String, Employee> readCsv() {
     	try {
     		LinkedHashMap<String, Employee> employeeData = new LinkedHashMap<>();
-            br = new BufferedReader(new FileReader("src/file/dadosfuncionarios.csv"));
+            br = new BufferedReader(new FileReader("src/file/employeesdata.csv"));
             while ((line = br.readLine()) != null) {
             	String[] dataPerson = line.split(";");
             	String name = dataPerson[0];
