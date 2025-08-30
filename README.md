@@ -5,17 +5,23 @@ O projeto foi desenvolvido para atender a os requisitos solicitados pelo teste t
 ## 🏗️ Estrutura do Projeto
 
 ```
-src/
-├── file/
-│   └── employeesdata.csv     # Arquivo CSV com dados dos funcionários
-├── model/
-│   ├── Person.java               # Classe base para pessoa
-│   └── Employee.java             # Classe funcionário (herda de Person)
-├── service/
-│   ├── Csv.java                  # Serviço para leitura do arquivo CSV
-│   └── EmployeeService.java      # Serviço com regras de negócio de Employee
-└── practicetest/
-    └── Main.java                 # Classe principal para execução
+testepratico/
+├── src/
+│   ├── file/
+│   │   └── dadosfuncionarios.csv    # Arquivo CSV com dados dos funcionários
+│   ├── models/
+│   │   ├── Person.java              # Classe base para pessoa
+│   │   └── Employee.java            # Classe funcionário (herda de Person)
+│   ├── service/
+│   │   ├── Csv.java                 # Serviço para leitura do arquivo CSV
+│   │   └── EmployeeService.java     # Serviço com regras de negócio
+│   ├── test/
+│   │   └── EmployeeServiceTest.java # Testes unitários das funcionalidades
+│   └── testepratico/
+│       └── Main.java                # Classe principal para execução
+├── bin/                             # Diretório com classes compiladas
+├── pom.xml                          # Configuração Maven
+└── README.md                        # Documentação do projeto
 ```
 
 ## 🎯 Requisitos Implementados
