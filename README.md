@@ -18,7 +18,7 @@ testepratico/
 │   │   ├── Csv.java                 # Serviço para leitura do arquivo CSV
 │   │   └── EmployeeService.java     # Serviço com regras de negócio
 │   └── test/
-│       └── EmployeeServiceTest.java # Testes unitários das funcionalidades
+│       └── EmployeeServiceTest.java    # Testes unitários das funcionalidades
 |
 ├── bin/                             # Diretório com classes compiladas
 ├── pom.xml                          # Configuração Maven
