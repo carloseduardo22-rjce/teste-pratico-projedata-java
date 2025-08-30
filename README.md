@@ -8,12 +8,13 @@ O projeto foi desenvolvido para atender a os requisitos solicitados pelo teste t
 testepratico/
 ├── src/
 │   ├── file/
-│   │   └── dadosfuncionarios.csv    # Arquivo CSV com dados dos funcionários
+│   │   └── employeesdata.csv    # Arquivo CSV com dados dos funcionários
 |   ├── main/
 |   |   └── Main.java                # Classe principal para execução
 │   ├── models/
-│   │   ├── Person.java              # Classe base para pessoa
 │   │   └── Employee.java            # Classe funcionário (herda de Person)
+│   │   └── Person.java              # Classe base para pessoa
+|   |
 │   ├── service/
 │   │   ├── Csv.java                 # Serviço para leitura do arquivo CSV
 │   │   └── EmployeeService.java     # Serviço com regras de negócio
