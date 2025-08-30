@@ -1,6 +1,6 @@
 ## 📋 Descrição do Projeto
 
-O sistema foi desenvolvido para atender a os requisitos solicitados pelo teste técnico da empresa Projedata.
+O projeto foi desenvolvido para atender a os requisitos solicitados pelo teste técnico da empresa Projedata.
 
 ## 🏗️ Estrutura do Projeto
 
