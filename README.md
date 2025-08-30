@@ -14,7 +14,7 @@ src/
 ├── service/
 │   ├── Csv.java                  # Serviço para leitura do arquivo CSV
 │   └── EmployeeService.java      # Serviço com regras de negócio de Employee
-└── testepratico/
+└── practicetest/
     └── Main.java                 # Classe principal para execução
 ```
 
@@ -170,6 +170,12 @@ src/
 - **Função**: Formatar valores monetários no padrão brasileiro
 - **Implementação**: `NumberFormat` com locale pt_BR
 
+### Formatação de Datas
+
+- **Método**: `formatDate(LocalDate birthDate)` (privado)
+- **Função**: Formatar datas de aniversário para o padrão dd/mm/yyyy
+- **Implementação**: `DateTimeFormatter` para formatação das datas passando o pattern de dd/mm/yyyy
+
 ## 🚀 Como Executar o Projeto
 
 ### Pré-requisitos
@@ -195,6 +201,52 @@ src/
    - Navegue até a classe `Main.java` em `src/testepratico/`
    - Execute o método `main`
    - A aplicação processará automaticamente todos os requisitos
+
+## 🧪 Testes Unitários
+
+O projeto inclui uma suíte de testes unitários usando **JUnit 4** para validar as funcionalidades principais.
+
+### Executar os Testes
+
+**Via IDE:**
+
+- Navegue até `src/test/EmployeeServiceTest.java`
+- Clique direito → Run As → JUnit Test
+
+**Via Maven:**
+
+```bash
+mvn test
+```
+
+### Cobertura dos Testes
+
+#### 🔍 Testes Implementados:
+
+1. **`testDeleteEmployee()`**
+
+   - **Objetivo**: Verificar se a exclusão do funcionário "João" funciona corretamente
+   - **Validações**:
+     - João existe antes da exclusão
+     - João não existe após a exclusão
+   - **Método testado**: `deleteEmployee(String name)`
+
+2. **`testOlderEmployee()`**
+
+   - **Objetivo**: Validar identificação do funcionário mais velho
+   - **Validações**:
+     - Funcionário mais velho tem 64 anos
+     - Nome do funcionário mais velho é "Caio"
+   - **Métodos testados**: `getOldestEmployee()`, `getEmployeeAge(Employee)`
+
+3. **`testTotalSalaryAfterDeletionAndIncrease()`**
+   - **Objetivo**: Testar cálculo total após exclusão e aumento salarial
+   - **Sequência testada**:
+     1. Exclusão do João
+     2. Aplicação de aumento de 10%
+     3. Cálculo do total dos salários
+   - **Valor esperado**: R$ 50.906,82
+   - **Métodos testados**: `deleteEmployee()`, `updateSalary()`, `totalSalary()`
 
 ### Estrutura de Dados (CSV)
 
@@ -252,6 +304,8 @@ A execução do programa produz a seguinte sequência de relatórios:
 ## 🛠️ Tecnologias Utilizadas
 
 - **Java 17**: Linguagem principal
+- **JUnit 4**: Framework de testes unitários
+- **Maven**: Gerenciamento de dependências e build
 
 ## 📁 Arquivos Importantes
 
@@ -260,4 +314,6 @@ A execução do programa produz a seguinte sequência de relatórios:
 - `Employee.java`: Extensão com dados profissionais
 - `Csv.java`: Leitor de arquivos CSV
 - `EmployeeService.java`: Lógica de negócio principal
+- `EmployeeServiceTest.java`: Testes unitários das funcionalidades
 - `dadosfuncionarios.csv`: Base de dados dos funcionários
+- `pom.xml`: Configuração Maven com dependências
