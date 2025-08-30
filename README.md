@@ -9,16 +9,17 @@ testepratico/
 ├── src/
 │   ├── file/
 │   │   └── dadosfuncionarios.csv    # Arquivo CSV com dados dos funcionários
+|   ├── main/
+|   |   └── Main.java                # Classe principal para execução
 │   ├── models/
 │   │   ├── Person.java              # Classe base para pessoa
 │   │   └── Employee.java            # Classe funcionário (herda de Person)
 │   ├── service/
 │   │   ├── Csv.java                 # Serviço para leitura do arquivo CSV
 │   │   └── EmployeeService.java     # Serviço com regras de negócio
-│   ├── test/
-│   │   └── EmployeeServiceTest.java # Testes unitários das funcionalidades
-│   └── testepratico/
-│       └── Main.java                # Classe principal para execução
+│   └── test/
+│       └── EmployeeServiceTest.java # Testes unitários das funcionalidades
+|
 ├── bin/                             # Diretório com classes compiladas
 ├── pom.xml                          # Configuração Maven
 └── README.md                        # Documentação do projeto
