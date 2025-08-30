@@ -187,7 +187,7 @@ testepratico/
 
 ### Pré-requisitos
 
-- Java JDK 8 ou superior
+- Java JDK 17
 - IDE Java (Eclipse, IntelliJ IDEA, VS Code, etc.)
 
 ### Passos para Execução
