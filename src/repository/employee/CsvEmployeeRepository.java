@@ -37,15 +37,15 @@ public class CsvEmployeeRepository implements EmployeeRepository {
             }
             return employeeData;
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.err.println("Arquivo não encontrado: " + e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Erro ao ler o arquivo: " + e.getMessage());
         } finally {
             if (br != null) {
                 try {
                     br.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    System.err.println("Erro ao fechar o BufferedReader: " + e.getMessage());
                 }
             }
         }

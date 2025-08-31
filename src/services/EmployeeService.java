@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import exception.EmployeeNotFoundException;
 import models.Employee;
 import repository.employee.EmployeeRepository;
 import util.FormatterUtil;
@@ -25,10 +26,10 @@ public class EmployeeService {
         this.employeeRepository = employeeRepository;
     }
 	
-	public void deleteEmployee(String name) throws Exception {
+	public void deleteEmployee(String name) {
 		LinkedHashMap<String, Employee> employeeData = employeeRepository.loadEmployees();
 		if(employeeData.remove("Joao") == null) {
-			throw new Exception("Funcionário joão não encontrado.");
+			throw new EmployeeNotFoundException("Funcionário Joao não encontrado.");
 		} 
 		System.out.print("Funcionário: " + name + " excluído com sucesso.");
 		System.out.println("");
