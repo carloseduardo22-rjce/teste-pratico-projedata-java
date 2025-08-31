@@ -1,26 +1,24 @@
-package service;
+package repository.employee;
 
-
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 
 import models.Employee;
 
-public class Csv {
+public class CsvEmployeeRepository implements EmployeeRepository {
 
+	private final String path = "src/file/employeesdata.csv";
 	private BufferedReader br = null;
     private String line = "";
 	
-    public LinkedHashMap<String, Employee> readCsv() {
-    	try {
+	@Override
+	public LinkedHashMap<String, Employee> loadEmployees() {
+		try {
     		LinkedHashMap<String, Employee> employeeData = new LinkedHashMap<>();
-            br = new BufferedReader(new FileReader("src/file/employeesdata.csv"));
+            br = new BufferedReader(new FileReader(path));
             while ((line = br.readLine()) != null) {
             	String[] dataPerson = line.split(";");
             	String name = dataPerson[0];
@@ -52,6 +50,6 @@ public class Csv {
             }
         }
 		return null;
-    }
-    
+	}
+
 }

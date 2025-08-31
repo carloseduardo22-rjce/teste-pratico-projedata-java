@@ -1,6 +1,6 @@
 ## 📋 Descrição do Projeto
 
-O projeto foi desenvolvido para atender a os requisitos solicitados pelo teste técnico de desenvolvedor java júnior da empresa Projedata.
+O projeto foi desenvolvido para atender aos requisitos solicitados pelo teste técnico de desenvolvedor java júnior da empresa Projedata. O sistema implementa o **Repository Pattern** para simular cenários reais de desenvolvimento, proporcionando melhor separação de responsabilidades e facilidade de manutenção.
 
 ## 🏗️ Estrutura do Projeto
 
@@ -14,14 +14,88 @@ testepratico/
 │   ├── models/
 │   │   ├── Employee.java            # Classe funcionário (herda de Person)
 │   │   └── Person.java              # Classe base para pessoa
-│   ├── service/
-│   │   ├── Csv.java                 # Serviço para leitura do arquivo CSV
+│   ├── repository/
+│   │   └── employee/
+│   │       ├── EmployeeRepository.java     # Interface do repositório
+│   │       └── CsvEmployeeRepository.java  # Implementação para CSV
+│   ├── services/
 │   │   └── EmployeeService.java     # Serviço com regras de negócio
-│   └── test/
-│       └── EmployeeServiceTest.java # Testes unitários das funcionalidades
+│   ├── test/
+│   │   └── EmployeeServiceTest.java # Testes unitários das funcionalidades
+│   └── util/
+│       └── FormatterUtil.java       # Utilitários de formatação
 ├── pom.xml                          # Configuração Maven
 └── README.md                        # Documentação do projeto
 ```
+
+## 🎯 Requisitos Implementados
+
+## 🏛️ Arquitetura - Repository Pattern
+
+### Interface EmployeeRepository
+
+**Objetivo**: Definir contrato para acesso aos dados de funcionários.
+
+```java
+public interface EmployeeRepository {
+    LinkedHashMap<String, Employee> loadEmployees();
+}
+```
+
+### Implementação CsvEmployeeRepository
+
+**Objetivo**: Implementação específica para leitura de dados via arquivo CSV.
+
+- **Classe**: `CsvEmployeeRepository`
+- **Implementa**: `EmployeeRepository`
+- **Responsabilidade**:
+  - Leitura do arquivo `employeesdata.csv`
+  - Parsing dos dados para objetos `Employee`
+  - Tratamento de exceções de I/O
+
+**Vantagens da Implementação**:
+
+- 🔄 **Extensibilidade**: Outras implementações podem ser criadas (DatabaseEmployeeRepository, JsonEmployeeRepository, etc.)
+- 🛡️ **Isolamento**: Mudanças na forma de ler dados não afetam a lógica de negócio
+- 🧪 **Testabilidade**: Service pode ser testado independentemente da fonte de dados
+
+### Injeção de Dependência
+
+**Implementação**: O `EmployeeService` recebe uma instância de `EmployeeRepository` via construtor.
+
+```java
+public class EmployeeService {
+    private final EmployeeRepository employeeRepository;
+
+    public EmployeeService(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
+    }
+}
+```
+
+**Benefícios**:
+
+- 🔧 **Baixo Acoplamento**: Service não depende de implementação específica
+- 🔄 **Inversão de Controle**: Dependências são injetadas externamente
+- 🧩 **Modularidade**: Cada componente tem responsabilidade bem definida
+
+## 🛠️ Utilitários de Formatação
+
+### FormatterUtil
+
+**Objetivo**: Centralizar formatações de datas e valores monetários.
+
+- **Classe**: `FormatterUtil`
+- **Métodos**:
+  - `formatCurrency(BigDecimal value)`: Formata valores monetários em padrão brasileiro
+  - `formatDate(LocalDate date)`: Formata datas no padrão dd/MM/yyyy
+
+**Benefícios**:
+
+- 🎯 **Centralização**: Todas as formatações em um local
+- 🔄 **Reutilização**: Métodos estáticos disponíveis para toda aplicação
+- 🧹 **Código Limpo**: Remove duplicação de código de formatação
+- 🌐 **Consistência**: Garantia de formatação uniforme
 
 ## 🎯 Requisitos Implementados
 
@@ -55,7 +129,7 @@ testepratico/
 
 **Requisito**: Inserir todos os funcionários, na mesma ordem e informações da tabela.
 
-- **Método**: `Csv.readCsv()`
+- **Método**: `CsvEmployeeRepository.loadEmployees()`
 - **Implementação**:
   - Lê o arquivo CSV `employeesdata.csv`
   - Usa `LinkedHashMap` para manter a ordem de inserção
@@ -68,9 +142,9 @@ testepratico/
 
 - **Método**: `EmployeeService.deleteEmployee(String name)`
 - **Implementação**:
-  - Remove o funcionário "João" do LinkedHashMap
+  - Remove o funcionário "João" do LinkedHashMap obtido via repository
   - Exibe mensagem de confirmação
-  - Trata exceção caso o funcionário não seja encontrado
+  - Lança exceção caso o funcionário não seja encontrado
 
 #### 3.3 Listagem de Funcionários
 
@@ -79,9 +153,9 @@ testepratico/
 - **Método**: `EmployeeService.employees()`
 - **Implementação**:
   - Exibe todos os funcionários com suas informações
-  - Data no formato dd/mm/aaaa
-  - Valores monetários com separador de milhar (ponto) e decimal (vírgula)
-  - Utiliza `NumberFormat` com locale brasileiro
+  - Data no formato dd/mm/aaaa usando `FormatterUtil.formatDate()`
+  - Valores monetários com formatação brasileira usando `FormatterUtil.formatCurrency()`
+  - Remove João automaticamente da listagem
 
 #### 3.4 Aumento Salarial
 
@@ -169,17 +243,14 @@ testepratico/
 
 ## 🔧 Métodos Auxiliares
 
-### Formatação de Valores
+### Formatação Centralizada (FormatterUtil)
 
-- **Método**: `formatValue(BigDecimal value)` (privado)
-- **Função**: Formatar valores monetários no padrão brasileiro
-- **Implementação**: `NumberFormat` com locale pt_BR
-
-### Formatação de Datas
-
-- **Método**: `formatDate(LocalDate birthDate)` (privado)
-- **Função**: Formatar datas de aniversário para o padrão dd/mm/yyyy
-- **Implementação**: `DateTimeFormatter` para formatação das datas passando o pattern dd/mm/yyyy
+- **Classe**: `FormatterUtil`
+- **Métodos**:
+  - `formatCurrency(BigDecimal value)`: Formatar valores monetários no padrão brasileiro (R$ x.xxx,xx)
+  - `formatDate(LocalDate date)`: Formatar datas no padrão dd/MM/yyyy
+- **Implementação**: Utiliza `NumberFormat` e `DateTimeFormatter` com configurações brasileiras
+- **Benefícios**: Centralização, reutilização e consistência de formatação
 
 ## 🚀 Como Executar o Projeto
 
@@ -272,6 +343,29 @@ Helena;02/09/1996;2799.93;Gerente
 
 ## 💡 Decisões de Design
 
+### Repository Pattern
+
+A implementação do **Repository Pattern** traz benefícios significativos:
+
+- **Separação de Responsabilidades**: Lógica de negócio separada do acesso aos dados
+- **Flexibilidade**: Fácil troca entre diferentes fontes de dados (CSV, JSON, Database)
+- **Testabilidade**: Possibilidade de criar implementações mock para testes
+- **Extensibilidade**: Novas fontes de dados podem ser adicionadas sem alterar o service
+- **Manutenibilidade**: Código mais organizado e fácil de manter
+
+### Injeção de Dependência
+
+- Baixo acoplamento entre componentes
+- Facilita testes unitários
+- Melhora a modularidade do código
+
+### FormatterUtil - Utility Class
+
+- Centralização de todas as formatações
+- Métodos estáticos para fácil acesso
+- Configurações brasileiras padronizadas
+- Eliminação de duplicação de código
+
 ### LinkedHashMap
 
 Foi utilizado `LinkedHashMap<String, Employee>` para armazenar os funcionários porque:
@@ -306,19 +400,23 @@ A execução do programa produz a seguinte sequência de relatórios:
 8. Total dos salários
 9. Quantidade de salários mínimos por funcionário
 
-## 🛠️ Tecnologias Utilizadas
+## 🛠️ Tecnologias Utilizadas e Boas Práticas
 
 - **Java 17**: Linguagem principal
 - **JUnit 4**: Framework de testes unitários
 - **Maven**: Gerenciamento de dependências e build
+- **Repository Pattern**: Padrão arquitetural para acesso aos dados
+- **Dependency Injection**: Inversão de controle e baixo acoplamento
 
 ## 📁 Arquivos Importantes
 
 - `Main.java`: Ponto de entrada da aplicação
 - `Person.java`: Classe base para dados pessoais
 - `Employee.java`: Extensão com dados profissionais
-- `Csv.java`: Leitor de arquivos CSV
+- `EmployeeRepository.java`: Interface do padrão Repository
+- `CsvEmployeeRepository.java`: Implementação para leitura de CSV
 - `EmployeeService.java`: Lógica de negócio principal
+- `FormatterUtil.java`: Utilitários de formatação centralizados
 - `EmployeeServiceTest.java`: Testes unitários das funcionalidades
 - `employeesdata.csv`: Base de dados dos funcionários
 - `pom.xml`: Configuração Maven com dependências

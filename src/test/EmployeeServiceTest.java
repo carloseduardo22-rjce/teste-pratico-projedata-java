@@ -8,29 +8,29 @@ import java.util.LinkedHashMap;
 import org.junit.*;
 
 import models.Employee;
-import service.Csv;
-import service.EmployeeService;
+import repository.employee.CsvEmployeeRepository;
+import services.EmployeeService;
 
 public class EmployeeServiceTest {
 
-    private Csv csv;
+    private CsvEmployeeRepository csvEmployeeRepository;
     private EmployeeService employeeService;
     
     @Before
     public void setUp() {
-        csv = new Csv();
-        employeeService = new EmployeeService(csv);
+    	CsvEmployeeRepository csvEmployeeRepository = new CsvEmployeeRepository();
+    	this.csvEmployeeRepository = csvEmployeeRepository;
+        employeeService = new EmployeeService(csvEmployeeRepository);
     }
     
     @After
     public void tearDown() {
-        csv = null;
         employeeService = null;
     }
 
     @Test
     public void testDeleteEmployee() throws Exception {
-        LinkedHashMap<String, Employee> employeeData = csv.readCsv();
+        LinkedHashMap<String, Employee> employeeData = csvEmployeeRepository.loadEmployees();
         assertTrue("João deveria existir antes da exclusão", employeeData.containsKey("Joao"));
         
         employeeService.deleteEmployee("Joao");
