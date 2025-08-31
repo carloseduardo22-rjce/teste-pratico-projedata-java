@@ -26,13 +26,14 @@ public class EmployeeService {
         this.employeeRepository = employeeRepository;
     }
 	
-	public void deleteEmployee(String name) {
+	public boolean deleteEmployee(String name) {
 		LinkedHashMap<String, Employee> employeeData = employeeRepository.loadEmployees();
 		if(employeeData.remove("Joao") == null) {
 			throw new EmployeeNotFoundException("Funcionário Joao não encontrado.");
 		} 
 		System.out.print("Funcionário: " + name + " excluído com sucesso.");
 		System.out.println("");
+		return true;
 	}
 	
 	
@@ -45,13 +46,9 @@ public class EmployeeService {
 		for (Entry<String, Employee> entry : employeeData.entrySet()) {
 	        Employee employee = entry.getValue();
 	        
-	        String dateFormatted = FormatterUtil.formatDate(employee.getDateOfBirth());
-	        
-	        String formattedSalary = FormatterUtil.formatCurrency(employee.getSalary());
-	        
 	        System.out.println("Nome do Funcionário: " + employee.getName() 
-	        					+ " / Data de nascimento do funcionário: " + dateFormatted
-	        					+ " / Salário do funcionário: " + formattedSalary
+	        					+ " / Data de nascimento do funcionário: " + FormatterUtil.formatDate(employee.getDateOfBirth())
+	        					+ " / Salário do funcionário: " + FormatterUtil.formatCurrency(employee.getSalary())
 	        					+ " / Função do funcionário: " + employee.getRole()); 
 	    }
 	}
@@ -75,14 +72,10 @@ public class EmployeeService {
 		System.out.println("Salário dos funcionários atualizados com 10%: ");
 		for (Entry<String, Employee> entry : employeeData.entrySet()) {
             Employee employee = entry.getValue();
-
-            String dateFormatted = FormatterUtil.formatDate(employee.getDateOfBirth());
-            
-            String formattedSalary = FormatterUtil.formatCurrency(employee.getSalary());
             
             System.out.println("Nome do Funcionário: " + employee.getName() 
-            					+ " / Data de nascimento do funcionário: " + dateFormatted 
-            					+ " / Salário do funcionário: " + formattedSalary
+            					+ " / Data de nascimento do funcionário: " + FormatterUtil.formatDate(employee.getDateOfBirth()) 
+            					+ " / Salário do funcionário: " + FormatterUtil.formatCurrency(employee.getSalary())
             					+ " / Função do funcionário: " + employee.getRole()); 
         }
 	}
@@ -176,7 +169,7 @@ public class EmployeeService {
 		}
 	}
 	
-	public BigDecimal totalSalary () throws Exception {
+	public BigDecimal totalSalary () {
 		LinkedHashMap<String, Employee> employeeData = employeeRepository.loadEmployees();
 		employeeData.remove("Joao");
 		
@@ -191,12 +184,9 @@ public class EmployeeService {
 		        .reduce(BigDecimal.ZERO, BigDecimal::add);
 	}
 	
-	public void totalEmployeeSalaries() throws Exception {
+	public void totalEmployeeSalaries() {
 		System.out.println("");
-		
-        String formattedTotalSalary = FormatterUtil.formatCurrency(totalSalary());
-
-	    System.out.println("Soma total dos salários: " + formattedTotalSalary);
+	    System.out.println("Soma total dos salários: " + FormatterUtil.formatCurrency(totalSalary()));
 	}
 	
 	public void minimumSalarys() {

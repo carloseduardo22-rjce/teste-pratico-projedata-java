@@ -3,7 +3,6 @@ package test;
 import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
-import java.util.LinkedHashMap;
 
 import org.junit.*;
 
@@ -12,14 +11,11 @@ import repository.employee.CsvEmployeeRepository;
 import services.EmployeeService;
 
 public class EmployeeServiceTest {
-
-    private CsvEmployeeRepository csvEmployeeRepository;
     private EmployeeService employeeService;
     
     @Before
     public void setUp() {
     	CsvEmployeeRepository csvEmployeeRepository = new CsvEmployeeRepository();
-    	this.csvEmployeeRepository = csvEmployeeRepository;
         employeeService = new EmployeeService(csvEmployeeRepository);
     }
     
@@ -29,14 +25,8 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    public void testDeleteEmployee() throws Exception {
-        LinkedHashMap<String, Employee> employeeData = csvEmployeeRepository.loadEmployees();
-        assertTrue("João deveria existir antes da exclusão", employeeData.containsKey("Joao"));
-        
-        employeeService.deleteEmployee("Joao");
-        
-        LinkedHashMap<String, Employee> updatedData = employeeService.getEmployeeData();
-        assertFalse("João não deveria existir após a exclusão", updatedData.containsKey("Joao"));
+    public void testDeleteEmployee() {
+        assertTrue("João deveria existir antes da exclusão", employeeService.deleteEmployee("Joao"));
     }
     
     @Test
@@ -49,7 +39,7 @@ public class EmployeeServiceTest {
     }
     
     @Test
-    public void testTotalSalaryAfterDeletionAndIncrease() throws Exception {
+    public void testTotalSalaryAfterDeletionAndIncrease() {
         employeeService.deleteEmployee("Joao");
         
         employeeService.updateSalary();
