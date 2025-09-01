@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import exception.EmployeeNotFoundException;
 import models.Employee;
 import repository.employee.EmployeeRepository;
 import util.FormatterUtil;
@@ -28,9 +27,7 @@ public class EmployeeService {
 	
 	public boolean deleteEmployee(String name) {
 		LinkedHashMap<String, Employee> employeeData = employeeRepository.loadEmployees();
-		if(employeeData.remove("Joao") == null) {
-			throw new EmployeeNotFoundException("Funcionário Joao não encontrado.");
-		} 
+		employeeData.remove("Joao");
 		System.out.print("Funcionário: " + name + " excluído com sucesso.");
 		System.out.println("");
 		return true;
@@ -38,8 +35,7 @@ public class EmployeeService {
 	
 	
 	public void employees() {
-		LinkedHashMap<String, Employee> employeeData = employeeRepository.loadEmployees();
-		employeeData.remove("Joao");
+		LinkedHashMap<String, Employee> employeeData = getEmployeeData();
 		System.out.println("");
 		System.out.println("Todos os funcionários: ");
 
@@ -60,7 +56,7 @@ public class EmployeeService {
 	}
 	
 	public void updateSalary() {
-		LinkedHashMap<String, Employee> employeeData = employeeRepository.loadEmployees();
+		LinkedHashMap<String, Employee> employeeData = getEmployeeData();
 		employeeData.remove("Joao");
 		for (Entry<String, Employee> entry : employeeData.entrySet()) {
             Employee employee = entry.getValue();
@@ -88,7 +84,7 @@ public class EmployeeService {
 	
 
 	private Map<String, List<Employee>> groupEmployeesByFunction() {
-		LinkedHashMap<String, Employee> employeeData = employeeRepository.loadEmployees();
+		LinkedHashMap<String, Employee> employeeData = getEmployeeData();
 		employeeData.remove("Joao");
 		Map<String, List<Employee>> employeesByFunction = new HashMap<>();
 
@@ -123,8 +119,7 @@ public class EmployeeService {
 	}
 	
 	public void printBirthDay() {
-		LinkedHashMap<String, Employee> employeeData = employeeRepository.loadEmployees();
-		employeeData.remove("Joao");
+		LinkedHashMap<String, Employee> employeeData = getEmployeeData();
 		System.out.println("Aniversariantes no mês 10 e 12:");
 		for (Entry<String, Employee> entry : employeeData.entrySet()) {
             Employee employee = entry.getValue();
@@ -140,8 +135,7 @@ public class EmployeeService {
 	}
 
 	public Employee getOldestEmployee() {
-		LinkedHashMap<String, Employee> employeeData = employeeRepository.loadEmployees();
-		employeeData.remove("Joao");
+		LinkedHashMap<String, Employee> employeeData = getEmployeeData();
     	return employeeData.values().stream()
             						.min(Comparator.comparing(Employee::getDateOfBirth))
             						.orElseThrow();
@@ -162,7 +156,7 @@ public class EmployeeService {
 	}
 	
 	public void printEmployeesAlphabetically() {
-		LinkedHashMap<String, Employee> employeeData = employeeRepository.loadEmployees();
+		LinkedHashMap<String, Employee> employeeData = getEmployeeData();
 		List<Employee> employees = employeeData.values().stream().sorted(Comparator.comparing(Employee::getName)).toList();
 		for (Employee employee : employees) {
 			System.out.println("Nome: " + employee.getName());
@@ -170,8 +164,7 @@ public class EmployeeService {
 	}
 	
 	public BigDecimal totalSalary () {
-		LinkedHashMap<String, Employee> employeeData = employeeRepository.loadEmployees();
-		employeeData.remove("Joao");
+		LinkedHashMap<String, Employee> employeeData = getEmployeeData();
 		
 		for (Entry<String, Employee> entry : employeeData.entrySet()) {
             Employee employee = entry.getValue();
@@ -190,8 +183,7 @@ public class EmployeeService {
 	}
 	
 	public void minimumSalarys() {
-		LinkedHashMap<String, Employee> employeeData = employeeRepository.loadEmployees();
-		employeeData.remove("Joao");
+		LinkedHashMap<String, Employee> employeeData = getEmployeeData();
 		for (Entry<String, Employee> entry : employeeData.entrySet()) {
             Employee employee = entry.getValue();
             BigDecimal salary = increaseSalary(employee.getSalary());

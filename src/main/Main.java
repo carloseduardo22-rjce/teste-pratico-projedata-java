@@ -11,7 +11,7 @@ public class Main {
 		EmployeeRepository employeeRepository = new CsvEmployeeRepository();
 		EmployeeService employeeService = new EmployeeService(employeeRepository);
 		
-		employeeService.deleteEmployee("João");
+		employeeService.deleteEmployee("Joao");
 		
 		employeeService.employees();
 		
